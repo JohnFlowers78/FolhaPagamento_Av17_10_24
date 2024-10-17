@@ -93,21 +93,29 @@ app.MapPost("/api/folha/cadastrar", ([FromBody] Folha folha, [FromServices] AppD
 });
 
 app.MapGet("/api/folha/buscar/{cpf}/{mes}/{ano}", ([FromRoute] string cpf, [FromRoute] int mes, [FromRoute] int ano, [FromServices] AppDataContext ctx) => 
-{
-  Funcionario? funcionario = ctx.Funcionarios.Find(cpf);
-  if (funcionario != null)
+{ 
+  Folha? folha = ctx.Folhas.FirstOrDefault(x => x.Funcionario.Cpf == cpf && x.Mes == mes && x.Ano == ano);
+  if (folha != null)
   {
-    int funcId = funcionario.FuncionarioId;
-  
-    Folha? folha = ctx.Folhas.FirstOrDefault(x => x.FuncionarioId == funcId && x.Mes == mes && x.Ano == ano);
-    if (folha != null)
-    {
-      return Results.Ok(folha);
-    }
-    return Results.NotFound();
+    return Results.Ok(folha);
   }
-  return Results.NotFound();
+  return Results.NotFound();  
 });
+// {
+//   Funcionario? funcionario = ctx.Funcionarios.Find(cpf);
+//   if (funcionario != null)
+//   {
+//     int funcId = funcionario.FuncionarioId;
+  
+//     Folha? folha = ctx.Folhas.FirstOrDefault(x => x.FuncionarioId == funcId && x.Mes == mes && x.Ano == ano);
+//     if (folha != null)
+//     {
+//       return Results.Ok(folha);
+//     }
+//     return Results.NotFound();
+//   }
+//   return Results.NotFound();
+// });
 
 // public static void SalarioBruto()
 // {}
